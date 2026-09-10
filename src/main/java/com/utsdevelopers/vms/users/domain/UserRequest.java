@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class UserRegisterRequest {
+public class UserRequest {
 
 
     @NotBlank(message = "Email is required")

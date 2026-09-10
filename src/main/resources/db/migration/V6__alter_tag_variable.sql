@@ -1,0 +1,2 @@
+ALTER TABLE visitors
+    MODIFY COLUMN tag VARCHAR(20);

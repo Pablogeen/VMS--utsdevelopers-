@@ -4,7 +4,7 @@ package com.utsdevelopers.vms.users.web;
 import com.utsdevelopers.vms.users.UserResponse;
 import com.utsdevelopers.vms.users.domain.LoginResponse;
 import com.utsdevelopers.vms.users.domain.UserLoginRequest;
-import com.utsdevelopers.vms.users.domain.UserRegisterRequest;
+import com.utsdevelopers.vms.users.domain.UserRequest;
 import com.utsdevelopers.vms.users.domain.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/sign-up")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest registerRequest){
+    public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRequest registerRequest){
         log.info("Call made to register a user: {}",registerRequest.getEmail());
         UserResponse registeredUser = userService.registerUser(registerRequest);
         log.info("User has been registered successfully: {}",registeredUser);
@@ -44,7 +44,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/get-all-users")
+    @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserResponse>>getAllUsers(
                                                    @RequestParam(defaultValue = "0") int page,
@@ -54,17 +54,6 @@ public class UserController {
             List<UserResponse> requestedUsers = userService.getAllUsers(pageable);
             log.info("Requested users: requestedUsers : {}",requestedUsers);
             return new ResponseEntity<>(requestedUsers, HttpStatus.OK);
-
-    }
-
-
-    @GetMapping("/{email}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserResponse>getUserByEmail(@PathVariable String email) {
-        log.info("Request made to get user by email: {}: ",email);
-        UserResponse requestedUser = userService.getUserByEmail(email);
-        log.info("User with email {} found ",email);
-        return new ResponseEntity<>(requestedUser, HttpStatus.OK);
 
     }
 
@@ -78,6 +67,32 @@ public class UserController {
 
     }
 
+    @GetMapping("/stats/total")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Long> getTotalUsers() {
+        log.info("Request made to get total number of users");
+        long response = userService.getTotalUsers();
+        log.info("Total users: {}", response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        log.info("Request made to delete user: {}", id);
+        userService.deleteUser(id);
+        log.info("User deleted successfully");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
+        log.info("Request made to update user: {}", id);
+        UserResponse response = userService.updateUser(id, request);
+        log.info("User updated successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
 }

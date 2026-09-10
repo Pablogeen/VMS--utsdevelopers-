@@ -3,6 +3,10 @@ package com.utsdevelopers.vms;
 import com.utsdevelopers.vms.users.domain.EmailAlreadyExistException;
 import com.utsdevelopers.vms.users.domain.InvalidCredentialsException;
 import com.utsdevelopers.vms.users.domain.UserNotFoundException;
+import com.utsdevelopers.vms.visitors.domain.EmployeeAlreadyExistException;
+import com.utsdevelopers.vms.visitors.domain.EmployeeNotFoundException;
+import com.utsdevelopers.vms.visitors.domain.NoTargsAvailableException;
+import com.utsdevelopers.vms.visitors.domain.VisitorNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,6 +93,56 @@ public class GlobalExceptionHandler {
                 request.getDescription(false),
                 LocalDateTime.now());
         return new ResponseEntity<>(details, HttpStatus.FORBIDDEN);
+
+    }
+
+
+    @ExceptionHandler(NoTargsAvailableException.class)
+    public ResponseEntity<?> tagsUnavailableException(NoTargsAvailableException e, WebRequest request) {
+        log.error("No Tags Available Exception");
+        ErrorDetails details = new ErrorDetails(
+                e.getMessage(),
+                "NO TAGS AVAILABLE",
+                request.getDescription(false),
+                LocalDateTime.now());
+        return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
+
+    }
+
+
+    @ExceptionHandler(EmployeeAlreadyExistException.class)
+    public ResponseEntity<?> employeeAlreadyExistException(EmployeeAlreadyExistException e, WebRequest request) {
+        log.error("Employee Already Exist Exception");
+        ErrorDetails details = new ErrorDetails(
+                e.getMessage(),
+                "EMPLOYEE ALREADY EXIST",
+                request.getDescription(false),
+                LocalDateTime.now());
+        return new ResponseEntity<>(details, HttpStatus.CONFLICT);
+
+    }
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<?> employeeNotFoundException(EmployeeNotFoundException e, WebRequest request) {
+        log.error("Employee Not Found Exception");
+        ErrorDetails details = new ErrorDetails(
+                e.getMessage(),
+                "EMPLOYEE NOT FOUND",
+                request.getDescription(false),
+                LocalDateTime.now());
+        return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
+
+    }
+
+    @ExceptionHandler(VisitorNotFoundException.class)
+    public ResponseEntity<?> visitorNotFoundException(VisitorNotFoundException e, WebRequest request) {
+        log.error("Visitor Not Exception");
+        ErrorDetails details = new ErrorDetails(
+                e.getMessage(),
+                "VISITOR WITH TAG NOT FOUND",
+                request.getDescription(false),
+                LocalDateTime.now());
+        return new ResponseEntity<>(details, HttpStatus.NOT_FOUND);
 
     }
 }

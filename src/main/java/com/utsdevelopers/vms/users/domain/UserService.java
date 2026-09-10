@@ -35,7 +35,7 @@ public class UserService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public UserResponse registerUser(@Valid UserRegisterRequest registerRequest) {
+    public UserResponse registerUser(@Valid UserRequest registerRequest) {
         log.info("About to register");
 
         String email = registerRequest.getEmail();
@@ -98,20 +98,35 @@ public class UserService {
         return userResponse;
     }
 
-    public UserResponse getUserByEmail(String email) {
-        log.info("About getting user with email: {}",email);
-        User user = userRepo.findByEmail(email).
-                orElseThrow(() -> new UserNotFoundException("USER NOT FOUND"));
-        log.info("Gotten user:");
-        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-        return userResponse;
-    }
-
 
     @Transactional
     public List<UserResponse> getAllUsers(Pageable pageable) {
         return userRepo.findAll(pageable)
                 .stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
+    }
+
+    public long getTotalUsers() {
+        return userRepo.count();
+    }
+
+    public void deleteUser(Long id) {
+        log.info("Deleting user: {}", id);
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepo.delete(user);
+        log.info("User deleted successfully: {}", id);
+    }
+
+    public UserResponse updateUser(Long id, UserRequest request) {
+        log.info("Updating user: {}", id);
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEmail(request.getEmail());
+        user.setRole(Role.valueOf(request.getRole().toUpperCase()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        User updatedUser = userRepo.save(user);
+        log.info("User updated successfully: {}", id);
+        return modelMapper.map(updatedUser, UserResponse.class);
     }
 }
 
