@@ -19,7 +19,6 @@ public class EmailService {
         String reference = event.firstName() + "|" +
                 event.tag() + "|" +
                 event.purpose();
-
         outboxRepository.save(new EmailOutbox(
                 event.visitorEmail(),
                 "YOUR VISITOR APPOINTMENT CONFIRMATION",

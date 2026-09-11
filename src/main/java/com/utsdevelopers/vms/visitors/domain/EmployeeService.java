@@ -38,7 +38,7 @@ public class EmployeeService {
     public EmployeeResponse getEmployeeById(Long id) {
         log.info("Fetching employee with id: {}", id);
         Employee employee = employeeRepository.findById(id).orElseThrow(() ->
-                        new RuntimeException("Employee not found with id: " + id));
+                        new EmployeeNotFoundException("Employee not found with id: " + id));
         return modelMapper.map(employee, EmployeeResponse.class);
     }
 
@@ -78,7 +78,7 @@ public class EmployeeService {
     public EmployeeResponse searchEmployee(String email) {
         log.info("Searching for employee with email: {}", email);
         Employee employee = employeeRepository.findByEmail(email).orElseThrow(() ->
-                        new RuntimeException("Employee not found with email: " + email));
+                        new EmployeeNotFoundException("Employee not found with email: " + email));
         return modelMapper.map(employee, EmployeeResponse.class);
 }
 
