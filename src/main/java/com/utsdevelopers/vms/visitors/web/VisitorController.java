@@ -131,5 +131,5 @@ public class VisitorController {
         log.info("Total visitors this month: {}", response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+ 
 }
