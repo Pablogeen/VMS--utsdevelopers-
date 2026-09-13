@@ -1,9 +1,9 @@
 package com.utsdevelopers.vms.visitors.web;
 
 import com.utsdevelopers.vms.users.User;
+import com.utsdevelopers.vms.visitors.domain.VisitorService;
 import com.utsdevelopers.vms.visitors.domain.VisitorRequest;
 import com.utsdevelopers.vms.visitors.domain.VisitorResponse;
-import com.utsdevelopers.vms.visitors.domain.VisitorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -131,5 +131,5 @@ public class VisitorController {
         log.info("Total visitors this month: {}", response);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
- 
+
 }
