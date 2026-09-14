@@ -121,6 +121,8 @@ public class UserService {
         log.info("Updating user: {}", id);
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
         user.setEmail(request.getEmail());
         user.setRole(Role.valueOf(request.getRole().toUpperCase()));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
