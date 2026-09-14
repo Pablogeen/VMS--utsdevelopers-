@@ -39,7 +39,7 @@ public class VisitorController {
 
     @PutMapping("/check-out")
     @PreAuthorize("hasAuthority('RECEPTIONIST')")
-    public ResponseEntity<String> checkOutVisitor(@RequestParam Integer tag) {
+    public ResponseEntity<String> checkOutVisitor(@RequestParam String tag) {
         log.info("Request made to check out visitor: {}", tag);
         String response = visitorService.checkOutVisitor(tag);
         log.info("Visitor checked out successfully: {}", tag);

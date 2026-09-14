@@ -55,7 +55,7 @@ public class VisitorService {
     }
 
     @Transactional
-    public String checkOutVisitor(Integer tag) {
+    public String checkOutVisitor(String tag) {
         log.info("About to check out a visitor with tag {}: ",tag);
 
         Visitor visitor = visitorRepository.findByTagAndStatus(tag, Status.CHECKED_IN)
@@ -93,8 +93,7 @@ public class VisitorService {
         List<Visitor> visitors;
 
         if (keyword.matches("\\d+")) {
-            Integer tag = Integer.parseInt(keyword);
-            visitors = visitorRepository.findByTag(tag, pageable);
+            visitors = visitorRepository.findByTag(keyword, pageable);
         } else {
             visitors = visitorRepository
                     .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(

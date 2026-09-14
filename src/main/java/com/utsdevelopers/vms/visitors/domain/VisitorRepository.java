@@ -19,13 +19,13 @@ public interface VisitorRepository extends JpaRepository<Visitor, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT v.tag FROM Visitor v WHERE v.status = 'CHECKED_IN'")
-    List<Integer> findIssuedTagsForUpdate();
+    List<String> findIssuedTagsForUpdate();
 
     @EntityGraph(attributePaths = {"host","user"})
-    Optional<Visitor> findByTagAndStatus(Integer tag, Status status);
+    Optional<Visitor> findByTagAndStatus(String tag, Status status);
 
     @EntityGraph(attributePaths = {"host","user"})
-    List<Visitor> findByTag(Integer tag, Pageable pageable);
+    List<Visitor> findByTag(String tag, Pageable pageable);
 
     @EntityGraph(attributePaths = {"host","user"})
     List<Visitor> findByStatus(Status status, Pageable pageable);
