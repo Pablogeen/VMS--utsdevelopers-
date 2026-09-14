@@ -19,7 +19,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "email", length = 50)
+    private String firstname;
+    private String lastname;
+    @Column(name ="email", unique = true)
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
