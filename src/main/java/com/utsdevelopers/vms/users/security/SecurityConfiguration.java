@@ -32,7 +32,7 @@ public class SecurityConfiguration {
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/v1/users/sign-in", "/v1/users/sign-up")
+                .requestMatchers("/v1/users/sign-in")
                 .permitAll().anyRequest().authenticated());
          http.exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {

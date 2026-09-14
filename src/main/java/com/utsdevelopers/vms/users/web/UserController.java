@@ -27,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRequest registerRequest){
         log.info("Call made to register a user: {}",registerRequest.getEmail());
         UserResponse registeredUser = userService.registerUser(registerRequest);
