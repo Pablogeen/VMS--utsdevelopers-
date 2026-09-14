@@ -40,7 +40,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','RECEPTIONIST')")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
         log.info("Request made to get all employees");
         List<EmployeeResponse> response = employeeService.getAllEmployees();
