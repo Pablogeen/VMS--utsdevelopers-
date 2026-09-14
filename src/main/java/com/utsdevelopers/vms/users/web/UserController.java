@@ -51,7 +51,7 @@ public class UserController {
 
 
     @GetMapping()
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','RECEPTIONIST')")
     public ResponseEntity<List<UserResponse>>getAllUsers(
                                                    @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "10") int size){
