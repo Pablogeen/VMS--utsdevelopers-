@@ -59,7 +59,7 @@ public class VisitorController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/un-checked")
+    @GetMapping("/un-checked") 
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<VisitorResponse>> getUncheckedOutVisitors(@RequestParam(defaultValue = "0") int page,
                                                                          @RequestParam(defaultValue = "10") int size){
