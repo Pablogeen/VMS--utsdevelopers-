@@ -26,6 +26,12 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/greet")
+    public ResponseEntity<String> greet(){
+        String message = "Helo World";
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @PostMapping("/sign-up")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRequest registerRequest){
