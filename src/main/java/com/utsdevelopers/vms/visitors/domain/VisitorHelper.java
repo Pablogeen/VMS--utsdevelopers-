@@ -23,12 +23,14 @@ public class VisitorHelper {
     public String generateTag() {
         log.info("Generating next available tag");
 
-        List<String> issuedTags = visitorRepository.findIssuedTagsForUpdate(); // PESSIMISTIC_WRITE lock
+        List<String> issuedTags = visitorRepository.findIssuedTagsForUpdate();
         Set<String> issued = new HashSet<>(issuedTags);
 
         for (int candidate = MIN_TAG; candidate <= MAX_TAG; candidate++) {
-            if (!issued.contains(candidate)) {
-                String tag = format(candidate);
+
+            String tag = format(candidate);
+
+            if (!issued.contains(tag)) {
                 log.info("Tag generated: {}", tag);
                 return tag;
             }
