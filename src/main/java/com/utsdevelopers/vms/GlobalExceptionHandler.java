@@ -136,7 +136,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(VisitorNotFoundException.class)
     public ResponseEntity<?> visitorNotFoundException(VisitorNotFoundException e, WebRequest request) {
-        log.error("Visitor Not Exception");
+        log.error("Visitor Not Found Exception");
         ErrorDetails details = new ErrorDetails(
                 e.getMessage(),
                 "VISITOR WITH TAG NOT FOUND",

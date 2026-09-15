@@ -1,35 +1,56 @@
 package com.utsdevelopers.vms.notification.domain;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class EmailSender {
 
-    private final JavaMailSender mailSender;
+    private final SendGrid sendGrid;
 
-    public void sendEmail(String toEmail, String subject, String htmlBody) {
+    @Value("${sendgrid.from.email}")
+    private String fromEmail;
+
+    @Value("${sendgrid.from.name}")
+    private String fromName;
+
+    public void sendEmail(String to, String subject, String htmlContent) {
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            Mail mail = new Mail(
+                    new Email(fromEmail, fromName),
+                    subject,
+                    new Email(to),
+                    new Content("text/html", htmlContent)
+            );
 
-            helper.setFrom("no-reply@utsdevelopers.com");
-            helper.setTo(toEmail);
-            helper.setSubject(subject);
-            helper.setText(htmlBody, true); // true = isHtml
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
 
-            mailSender.send(message);
-            log.info("Email sent successfully to {}", toEmail);
+            Response response = sendGrid.api(request);
 
-        } catch (MessagingException e) {
-            log.error("Failed to send email to {}: {}", toEmail, e.getMessage());
+            if (response.getStatusCode() >= 400) {
+                throw new RuntimeException("SendGrid failed: " + response.getStatusCode() + " " + response.getBody());
+            }
+
+            log.info("Email queued successfully for {}", to);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to send email", e);
         }
     }
 }

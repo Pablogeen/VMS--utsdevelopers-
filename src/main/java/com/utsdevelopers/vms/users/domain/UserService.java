@@ -117,15 +117,17 @@ public class UserService {
         log.info("User deleted successfully: {}", id);
     }
 
-    public UserResponse updateUser(Long id, UserRequest request) {
+    public UserResponse updateUser(Long id, UserUpdateRequest request) {
         log.info("Updating user: {}", id);
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
-        user.setEmail(request.getEmail());
         user.setRole(Role.valueOf(request.getRole().toUpperCase()));
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         User updatedUser = userRepo.save(user);
         log.info("User updated successfully: {}", id);
         return modelMapper.map(updatedUser, UserResponse.class);

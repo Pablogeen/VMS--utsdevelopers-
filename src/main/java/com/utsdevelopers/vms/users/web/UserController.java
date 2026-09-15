@@ -2,10 +2,7 @@ package com.utsdevelopers.vms.users.web;
 
 
 import com.utsdevelopers.vms.users.UserResponse;
-import com.utsdevelopers.vms.users.domain.LoginResponse;
-import com.utsdevelopers.vms.users.domain.UserLoginRequest;
-import com.utsdevelopers.vms.users.domain.UserRequest;
-import com.utsdevelopers.vms.users.domain.UserService;
+import com.utsdevelopers.vms.users.domain.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +90,7 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest request) {
         log.info("Request made to update user: {}", id);
         UserResponse response = userService.updateUser(id, request);
         log.info("User updated successfully");
